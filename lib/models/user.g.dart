@@ -12,9 +12,8 @@ CustomUser _$CustomUserFromJson(Map<String, dynamic> json) => CustomUser(
       phoneNumber: json['phoneNumber'],
       bio: json['bio'] as String,
       email: json['email'] as String,
-      friends: (json['friends'] as List<dynamic>)
-          .map((e) => CustomUser.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      friends:
+          (json['friends'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$CustomUserToJson(CustomUser instance) =>

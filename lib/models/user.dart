@@ -9,7 +9,7 @@ class CustomUser {
   final String username;
   final dynamic phoneNumber;
   final String bio;
-  final List<CustomUser> friends;
+  final List<String> friends;
 
   CustomUser({
     required this.name,

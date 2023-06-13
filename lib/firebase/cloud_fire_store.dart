@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/models/user.dart';
 
 class CloudFireStore {
   FirebaseFirestore firestore = FirebaseFirestore.instance
     ..settings = const Settings(persistenceEnabled: false);
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   void addUserToDatabase(UserCredential userCredential) async {
     try {
@@ -24,10 +26,34 @@ class CloudFireStore {
     }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> readUsersData() {
+  Future<QuerySnapshot<Map<String, dynamic>>> readUsersData() async {
     try {
-      return firestore.collection('users').get();
+      Iterable<Object?>? items;
+      await firestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .get()
+          .then((docs) {
+        items = docs.data()!['friends'];
+      });
+      logger.i(items);
+      return firestore
+          .collection('users')
+          .where('friends', arrayContainsAny: items)
+          .get();
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> addUserToFriendList(Map<Object, Object> data) async {
+    try {
+      await firestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser?.uid)
+          .update(data);
+    } catch (e) {
+      logger.e(e);
       rethrow;
     }
   }

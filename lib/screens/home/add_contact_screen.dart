@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/cloud_fire_store.dart';
+import 'package:messaging_app/helpers/logger.dart';
+import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/widgets/contact_widget.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
@@ -46,19 +49,31 @@ class _AddContactScreenState extends State<AddContactScreen> {
             child: FutureBuilder(
               future: CloudFireStore().readUsersData(),
               builder: (context, snapshot) {
-                List<QueryDocumentSnapshot<Map<String, dynamic>>>? data =
-                    snapshot.data?.docs;
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    itemBuilder: (context, index) {
-                      return ContactWidget(data: data[index].data());
-                    },
-                    itemCount: data!.length,
-                  );
-                }
+                try {
+                  List<QueryDocumentSnapshot<Map<String, dynamic>>>? data =
+                      snapshot
+                          .data?.docs
+                        ?..removeWhere((query) =>
+                            query.data()['email'] ==
+                            FirebaseAuth.instance.currentUser?.email);
 
-                return const Center(child: CircularProgressIndicator());
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    logger.i(data?[0].data());
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      itemBuilder: (context, index) {
+                        final CustomUser user =
+                            CustomUser.fromJson(data[index].data());
+                        return ContactWidget(user: user);
+                      },
+                      itemCount: data!.length,
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                } catch (e) {
+                  logger.e(e);
+                  return const Center(child: Text('Search to add user'));
+                }
               },
             ),
           ),

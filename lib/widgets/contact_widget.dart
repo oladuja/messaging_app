@@ -1,20 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:messaging_app/firebase/cloud_fire_store.dart';
 import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/static/colors.dart';
 
-class ContactWidget extends StatelessWidget {
-  final Map<String, dynamic> data;
+class ContactWidget extends StatefulWidget {
+  final CustomUser user;
 
   const ContactWidget({
     super.key,
-    required this.data,
+    required this.user,
   });
 
   @override
+  State<ContactWidget> createState() => _ContactWidgetState();
+}
+
+class _ContactWidgetState extends State<ContactWidget> {
+  bool onClicked = false;
+
+  @override
   Widget build(BuildContext context) {
-    final CustomUser user = CustomUser.fromJson(data);
-    if (user.email != FirebaseAuth.instance.currentUser?.email) {
+    if (widget.user.email != FirebaseAuth.instance.currentUser?.email) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: ListTile(
@@ -28,23 +36,32 @@ class ContactWidget extends StatelessWidget {
             ),
           ),
           title: Text(
-            user.email,
+            widget.user.email,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Text(
-            user.bio,
+            widget.user.bio,
             style: const TextStyle(
               fontSize: 12,
               color: AppColor.mainColor,
             ),
           ),
-          trailing: TextButton(
-            onPressed: () {},
-            child: const Text('Add'),
-          ),
+          trailing: onClicked
+              ? const Text('Added')
+              : TextButton(
+                  onPressed: () async {
+                    await CloudFireStore().addUserToFriendList({
+                      'friends': FieldValue.arrayUnion([widget.user.email]),
+                    });
+                    setState(() {
+                      onClicked = true;
+                    });
+                  },
+                  child: const Text('Add'),
+                ),
         ),
       );
     }

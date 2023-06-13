@@ -27,11 +27,11 @@ class MessagingApp extends StatelessWidget {
       future: prefs.appState(),
       builder: (_, snapShot) {
         if (snapShot.connectionState == ConnectionState.done) {
-          logger.i(snapShot.data);
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(fontFamily: 'Gilroy'),
-            initialRoute: snapShot.data! ?  HomeScreen.routeName : Welcome.routeName,
+            initialRoute:
+                snapShot.data! ? HomeScreen.routeName : Welcome.routeName,
             routes: {
               ProfileScreen.routeName: (_) => const ProfileScreen(),
               AddContactScreen.routeName: (_) => const AddContactScreen(),

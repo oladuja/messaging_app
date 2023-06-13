@@ -77,8 +77,12 @@ class _ChatScreenState extends State<ChatScreen> {
               reverse: true,
               itemBuilder: (context, index) => ChatBubble(
                 margin: (index % 2 == 1)
-                    ? const EdgeInsets.only(left: 0.3, bottom: 15)
-                    : const EdgeInsets.only(right: 0.3, bottom: 15),
+                    ? EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.3,
+                        bottom: 15)
+                    : EdgeInsets.only(
+                        right: MediaQuery.of(context).size.width * 0.3,
+                        bottom: 15),
                 padding: const EdgeInsets.all(15.0),
                 backGroundColor: (index % 2 == 1)
                     ? AppColor.mainColor
