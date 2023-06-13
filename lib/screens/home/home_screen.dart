@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/auth.dart';
+import 'package:messaging_app/screens/home/add_contact_screen.dart';
 import 'package:messaging_app/screens/welcome/welcome.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/static/tab.dart';
@@ -30,17 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Message Me',
                       style: TextStyle(
-                        fontSize: 24.sp,
+                        fontSize: 24,
                         color: AppColor.mainColor,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                     const Spacer(),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context)
+                          .pushNamed(AddContactScreen.routeName),
                       icon: const FaIcon(
                         FontAwesomeIcons.plus,
                         color: AppColor.mainColor,

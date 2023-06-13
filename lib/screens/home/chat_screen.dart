@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/screens/home/profile_screen.dart';
 import 'package:messaging_app/static/colors.dart';
@@ -16,8 +15,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,13 +30,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     color: AppColor.mainColor,
                   ),
                 ),
-                SizedBox(width: 15.w),
+                const SizedBox(width: 15),
                 GestureDetector(
                   onTap: () =>
                       Navigator.of(context).pushNamed(ProfileScreen.routeName),
                   child: Container(
-                    width: 45.w,
-                    height: 45.h,
+                    width: 45,
+                    height: 45,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/images/dp0.png'),
@@ -47,11 +44,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 15.w),
-                Column(
+                const SizedBox(width: 15),
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Theresa Web',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -61,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       'Online',
                       style: TextStyle(
                         color: AppColor.mainColor,
-                        fontSize: 12.sp,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -76,10 +73,12 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Expanded(
             child: ListView.builder(
+              padding: EdgeInsets.zero,
+              reverse: true,
               itemBuilder: (context, index) => ChatBubble(
                 margin: (index % 2 == 1)
-                    ? EdgeInsets.only(left: 0.3.sw, bottom: 15)
-                    : EdgeInsets.only(right: 0.3.sw, bottom: 15),
+                    ? const EdgeInsets.only(left: 0.3, bottom: 15)
+                    : const EdgeInsets.only(right: 0.3, bottom: 15),
                 padding: const EdgeInsets.all(15.0),
                 backGroundColor: (index % 2 == 1)
                     ? AppColor.mainColor
@@ -99,10 +98,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
               ),
-              itemCount: 10,
+              itemCount: 15,
             ),
           ),
-          SendMessage(controller: controller),
+          const SendMessage(),
         ],
       ),
     );

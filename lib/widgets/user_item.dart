@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:messaging_app/screens/home/chat_screen.dart';
 import 'package:messaging_app/static/colors.dart';
 
@@ -14,25 +13,25 @@ class UserItem extends StatelessWidget {
       onTap: () => Navigator.of(context).pushNamed(ChatScreen.routeName),
       child: ListTile(
         leading: Container(
-          width: 80.w,
-          height: 80.h,
+          width: 80,
+          height: 80,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/dp0.png'),
             ),
           ),
         ),
-        title: Text(
+        title: const Text(
           'Theresa Webb',
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
-        subtitle: Text(
+        subtitle: const Text(
           'How are you doing?',
           style: TextStyle(
-            fontSize: 12.sp,
+            fontSize: 12,
             color: AppColor.mainColor,
           ),
         ),
@@ -53,10 +52,10 @@ class UserItem extends StatelessWidget {
                       color: AppColor.mainColor,
                       borderRadius: BorderRadius.circular(30)),
                   padding: const EdgeInsets.all(6.0),
-                  child: Text(
+                  child: const Text(
                     '12',
                     style: TextStyle(
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       color: Colors.white,
                     ),
                   ),

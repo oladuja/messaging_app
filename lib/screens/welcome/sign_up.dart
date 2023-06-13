@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:messaging_app/helpers/email_validator.dart';
 import 'package:messaging_app/firebase/auth.dart';
 import 'package:messaging_app/screens/home/home_screen.dart';
@@ -34,33 +33,33 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: MediaQuery.of(context).padding.top + 75),
-              Text(
+              const Text(
                 'Create Account',
                 style: TextStyle(
-                  fontSize: 24.sp,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: AppColor.mainColor,
                 ),
               ),
-              SizedBox(height: 15.h),
-              Text(
+              const SizedBox(height: 15),
+              const Text(
                 'Email Address',
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(fontSize: 14),
               ),
               EmailTextField(controller: emailController),
-              SizedBox(height: 25.h),
-              Text(
+              const SizedBox(height: 25),
+              const Text(
                 'Password',
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(fontSize: 14),
               ),
               PasswordTextfield(controller: passwordController),
-              SizedBox(height: 25.h),
-              Text(
+              const SizedBox(height: 25),
+              const Text(
                 'Confirm Password',
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(fontSize: 14),
               ),
               PasswordTextfield(controller: confirmPasswordController),
-              SizedBox(height: 25.h),
+              const SizedBox(height: 25),
               Row(
                 children: [
                   GestureDetector(

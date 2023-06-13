@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/widgets/account_info.dart';
@@ -26,13 +25,13 @@ class ProfileScreen extends StatelessWidget {
                       color: AppColor.mainColor,
                     ),
                   ),
-                  SizedBox(width: 15.w),
-                  Text(
+                  const SizedBox(width: 15),
+                  const Text(
                     '@theresa',
                     style: TextStyle(
                       color: AppColor.mainColor,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18.sp,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -43,35 +42,35 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 15.w),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       Container(
-                        width: 45.w,
-                        height: 45.h,
+                        width: 45,
+                        height: 45,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/images/dp0.png'),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 15.w,
+                      const SizedBox(
+                        width: 15,
                       ),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Theresa Webb',
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             '+375(29)9638433',
                             style: TextStyle(
-                              fontSize: 10.sp,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: AppColor.darkGreyColor,
                             ),
@@ -80,15 +79,15 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15.w),
-                  Text(
+                  const SizedBox(height: 15),
+                  const Text(
                     'Account',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
+                      fontSize: 14,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  const SizedBox(height: 8),
                   const AccountInfo(
                     info: '+375(29)9638433',
                     detail: 'Tap to change phone number',
@@ -102,10 +101,10 @@ class ProfileScreen extends StatelessWidget {
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac est pulvinar metus fermentum vehicula vitae porta lectus. Pellentesque libero nisi',
                     detail: 'Bio',
                   ),
-                  Text(
+                  const Text(
                     'Settings',
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                   const SettingItem(
                     text: 'Notification and Sounds',

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:messaging_app/screens/welcome/log_in.dart';
 import 'package:messaging_app/screens/welcome/sign_up.dart';
 import 'package:messaging_app/static/colors.dart';
@@ -17,37 +16,37 @@ class Welcome extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Message Me',
               style: TextStyle(
                 color: AppColor.mainColor,
-                fontSize: 30.sp,
+                fontSize: 30,
                 fontWeight: FontWeight.w900,
               ),
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextButton(
                   onPressed: () =>
                       Navigator.of(context).pushNamed(SignUp.routeName),
-                  child: Text(
+                  child: const Text(
                     'Sign Up',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       color: AppColor.mainColor,
                     ),
                   ),
                 ),
-                SizedBox(width: 25.w),
+                const SizedBox(width: 25),
                 TextButton(
                   onPressed: () =>
                       Navigator.of(context).pushNamed(LogIn.routeName),
-                  child: Text(
+                  child: const Text(
                     'Log In',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       color: AppColor.mainColor,
                     ),
                   ),

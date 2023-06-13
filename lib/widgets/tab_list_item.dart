@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:messaging_app/static/colors.dart';
 
 class TabListItem extends StatelessWidget {
@@ -32,7 +31,7 @@ class TabListItem extends StatelessWidget {
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
-            fontSize: 14.sp,
+            fontSize: 14,
           ),
         ),
       ),

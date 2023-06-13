@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:messaging_app/static/colors.dart';
 
 
@@ -24,11 +23,11 @@ class AccountInfo extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 4.h),
+        const SizedBox(height: 4),
         Text(
           detail,
-          style: TextStyle(
-            fontSize: 10.sp,
+          style: const TextStyle(
+            fontSize: 10,
             fontWeight: FontWeight.bold,
             color: AppColor.darkGreyColor,
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TopBar extends StatelessWidget {
   final Widget child;
@@ -8,19 +7,18 @@ class TopBar extends StatelessWidget {
     required this.child,
   });
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top + 15.0,
-          bottom: 15.0,
-          right: 15.0,
-          left: 15.0,
-        ),
-        width: 1.sw,
-        color: Colors.white,
-        child: child,);
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top + 8.0,
+        bottom: 8.0,
+        right: 15.0,
+        left: 15.0,
+      ),
+      width: double.infinity,
+      color: Colors.white,
+      child: child,
+    );
   }
 }
