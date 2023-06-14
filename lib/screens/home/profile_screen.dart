@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/cloud_fire_store.dart';
+import 'package:messaging_app/helpers/image_picker.dart';
 import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/static/colors.dart';
@@ -60,12 +61,15 @@ class ProfileScreen extends StatelessWidget {
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            Container(
-                              width: 45,
-                              height: 45,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/dp0.png'),
+                            GestureDetector(
+                              onTap: () => pickImage(),
+                              child: Container(
+                                width: 45,
+                                height: 45,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/dp0.png'),
+                                  ),
                                 ),
                               ),
                             ),

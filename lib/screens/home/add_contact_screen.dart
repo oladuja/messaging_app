@@ -52,7 +52,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                   List<QueryDocumentSnapshot<Map<String, dynamic>>>? data =
                       snapshot.data?.docs;
                   if (snapshot.connectionState == ConnectionState.done) {
-                    logger.i(data);
+                    // logger.i(data);
                     return ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       itemBuilder: (context, index) {
@@ -65,7 +65,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                   }
                   return const Center(child: CircularProgressIndicator());
                 } catch (e) {
-                  logger.e(e);
+                  // logger.e(e);
                   return const Center(child: Text('Search to add user'));
                 }
               },

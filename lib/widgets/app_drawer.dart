@@ -36,6 +36,9 @@ class AppDrawer extends StatelessWidget {
                   if (snapShot.hasError) {
                     return Container();
                   }
+                  if (snapShot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
                   return Row(
                     children: [
                       GestureDetector(

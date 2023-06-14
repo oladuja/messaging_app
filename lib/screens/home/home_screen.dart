@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:messaging_app/firebase/cloud_fire_store.dart';
+import 'package:messaging_app/helpers/logger.dart';
+import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/screens/home/add_contact_screen.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/static/tab.dart';
@@ -87,10 +90,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              itemBuilder: (context, index) => const UserItem(),
-              itemCount: 15,
+            child: FutureBuilder(
+              future: CloudFireStore().getFriends(),
+              builder: (context, snapshot) {
+                QueryDocumentSnapshot<Map<String, dynamic>> friendsList =
+                    snapshot.data!.docs.firstWhere((element) =>
+                        CustomUser.fromJson(element.data()).userId ==
+                        firebaseAuth.currentUser!.uid);
+                logger.i(friendsList.data()['friends']);
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  itemBuilder: (context, index) => const UserItem(),
+                  itemCount: 15,
+                );
+              },
             ),
           ),
         ],

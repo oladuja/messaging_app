@@ -28,7 +28,7 @@ class CloudFireStore {
 
   Future<QuerySnapshot<Map<String, dynamic>>> readUsersData() async {
     try {
-      Iterable<Object?>? items;
+      Iterable<Object?>? items = [];
       await firestore
           .collection('users')
           .doc(firebaseAuth.currentUser!.uid)
@@ -37,20 +37,30 @@ class CloudFireStore {
         items = docs.data()!['friends'].toList();
       });
       logger.i(items);
-      return firestore
-          .collection('users')
-          .where('email', whereNotIn: [...items!]).get()
-      ..then((value) => logger.i(value.docs.length));
+      if (items!.isNotEmpty) {
+        return firestore
+            .collection('users')
+            .where('email', whereNotIn: [...items!]).get();
+      }
+      return firestore.collection('users').get();
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> loadUsersData() async {
+  Future<QuerySnapshot<Map<String, dynamic>>> loadUsersData() {
     try {
       return firestore
           .collection('users')
           .where('userId', whereIn: [firebaseAuth.currentUser!.uid]).get();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getFriends() {
+    try {
+      return firestore.collection('users').get();
     } catch (e) {
       rethrow;
     }
