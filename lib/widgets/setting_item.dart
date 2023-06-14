@@ -5,10 +5,12 @@ class SettingItem extends StatelessWidget {
   final String text;
   final IconData icon;
 
+  final Color color;
   const SettingItem({
     super.key,
     required this.text,
     required this.icon,
+    required this.color,
   });
 
   @override
@@ -16,12 +18,13 @@ class SettingItem extends StatelessWidget {
     return ListTile(
       leading: FaIcon(
         icon,
-        color: Colors.black,
+        color: color,
         size: 18,
       ),
       title: Text(
         text,
-        style: const TextStyle(
+        style:  TextStyle(
+          color: color,
           fontWeight: FontWeight.bold,
           fontSize: 12,
         ),

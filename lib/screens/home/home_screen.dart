@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:messaging_app/firebase/auth.dart';
 import 'package:messaging_app/screens/home/add_contact_screen.dart';
-import 'package:messaging_app/screens/welcome/welcome.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/static/tab.dart';
+import 'package:messaging_app/widgets/app_drawer.dart';
 import 'package:messaging_app/widgets/tab_list_item.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
 import 'package:messaging_app/widgets/user_item.dart';
@@ -19,9 +20,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int counter = 0;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: AppDrawer(),
       body: Column(
         children: [
           TopBar(
@@ -30,6 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
+                    Builder(builder: (context) {
+                      return IconButton(
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                        icon: const FaIcon(
+                          FontAwesomeIcons.bars,
+                          color: AppColor.mainColor,
+                        ),
+                      );
+                    }),
                     const Text(
                       'Message Me',
                       style: TextStyle(
@@ -51,13 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {},
                       icon: const FaIcon(
                         FontAwesomeIcons.magnifyingGlass,
-                        color: AppColor.mainColor,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const FaIcon(
-                        FontAwesomeIcons.bars,
                         color: AppColor.mainColor,
                       ),
                     ),
@@ -89,11 +96,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Auth.logOut();
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(Welcome.routeName, (route) => false);
-      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: AppColor.mainColor,
+        child: const FaIcon(
+          FontAwesomeIcons.pen,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

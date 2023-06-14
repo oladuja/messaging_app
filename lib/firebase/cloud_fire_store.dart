@@ -8,17 +8,17 @@ class CloudFireStore {
     ..settings = const Settings(persistenceEnabled: false);
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  void addUserToDatabase(UserCredential userCredential) async {
+  void addUserToDatabase(
+      UserCredential userCredential, String bio, String name) async {
     try {
       await firestore
           .collection('users')
           .doc(userCredential.user!.uid)
           .set(CustomUser(
-            bio: '',
+            bio: bio,
             email: userCredential.user!.email!,
-            name: '',
-            phoneNumber: '',
-            username: '',
+            name: name,
+            userId: userCredential.user!.uid,
             friends: [],
           ).toJson());
     } catch (e) {
@@ -34,13 +34,23 @@ class CloudFireStore {
           .doc(firebaseAuth.currentUser!.uid)
           .get()
           .then((docs) {
-        items = docs.data()!['friends'];
+        items = docs.data()!['friends'].toList();
       });
       logger.i(items);
       return firestore
           .collection('users')
-          .where('friends', arrayContainsAny: items)
-          .get();
+          .where('email', whereNotIn: [...items!]).get()
+      ..then((value) => logger.i(value.docs.length));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> loadUsersData() async {
+    try {
+      return firestore
+          .collection('users')
+          .where('userId', whereIn: [firebaseAuth.currentUser!.uid]).get();
     } catch (e) {
       rethrow;
     }

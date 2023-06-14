@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/cloud_fire_store.dart';
@@ -51,14 +50,9 @@ class _AddContactScreenState extends State<AddContactScreen> {
               builder: (context, snapshot) {
                 try {
                   List<QueryDocumentSnapshot<Map<String, dynamic>>>? data =
-                      snapshot
-                          .data?.docs
-                        ?..removeWhere((query) =>
-                            query.data()['email'] ==
-                            FirebaseAuth.instance.currentUser?.email);
-
+                      snapshot.data?.docs;
                   if (snapshot.connectionState == ConnectionState.done) {
-                    logger.i(data?[0].data());
+                    logger.i(data);
                     return ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       itemBuilder: (context, index) {

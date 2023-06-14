@@ -6,6 +6,7 @@ import 'package:messaging_app/screens/welcome/log_in.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/widgets/email_textfield.dart';
 import 'package:messaging_app/widgets/password_textfield.dart';
+import 'package:messaging_app/widgets/text_textfield.dart';
 
 class SignUp extends StatefulWidget {
   static const String routeName = 'sign-up';
@@ -22,6 +23,9 @@ class _SignUpState extends State<SignUp> {
   TextEditingController confirmPasswordController = TextEditingController();
 
   bool isClicked = false;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,18 @@ class _SignUpState extends State<SignUp> {
                 style: TextStyle(fontSize: 14),
               ),
               EmailTextField(controller: emailController),
+              const SizedBox(height: 25),
+              const Text(
+                'Bio',
+                style: TextStyle(fontSize: 14),
+              ),
+              TextTextField(controller: bioController),
+              const SizedBox(height: 25),
+              const Text(
+                'Name',
+                style: TextStyle(fontSize: 14),
+              ),
+              TextTextField(controller: nameController),
               const SizedBox(height: 25),
               const Text(
                 'Password',
@@ -107,6 +123,33 @@ class _SignUpState extends State<SignUp> {
                           });
                           return;
                         }
+
+                        if (nameController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Name can\'t be empty'),
+                            ),
+                          );
+                          setState(() {
+                            isClicked = false;
+                          });
+                          return;
+                        }
+
+                        if (bioController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Bio can\'t be empty'),
+                            ),
+                          );
+                          setState(() {
+                            isClicked = false;
+                          });
+                          return;
+                        }
+
                         if (!(passwordController.text.length > 6)) {
                           ScaffoldMessenger.of(context).removeCurrentSnackBar();
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -122,14 +165,19 @@ class _SignUpState extends State<SignUp> {
                         if (emailValidator(emailController.text) &&
                             (passwordController.text ==
                                 confirmPasswordController.text) &&
-                            (passwordController.text.length > 6)) {
+                            (passwordController.text.length > 6) &&
+                            bioController.text.isNotEmpty &&
+                            nameController.text.isNotEmpty) {
                           try {
                             await Auth.createAccount(
-                                emailController.text.trim(),
-                                passwordController.text.trim());
+                              emailController.text.trim(),
+                              passwordController.text.trim(),
+                              bioController.text.trim(),
+                              nameController.text.trim(),
+                            );
                             setState(() {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                HomeScreen.routeName, (route) => false);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  HomeScreen.routeName, (route) => false);
                               isClicked = false;
                               // showDialogAndClose(context);
                             });

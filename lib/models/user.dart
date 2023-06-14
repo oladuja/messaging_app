@@ -6,15 +6,13 @@ part 'user.g.dart';
 class CustomUser {
   final String email;
   final String name;
-  final String username;
-  final dynamic phoneNumber;
+  final String userId;
   final String bio;
   final List<String> friends;
 
   CustomUser({
     required this.name,
-    required this.username,
-    required this.phoneNumber,
+    required this.userId,
     required this.bio,
     required this.email,
     required this.friends,

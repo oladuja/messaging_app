@@ -4,14 +4,15 @@ import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/helpers/shared_preferences.dart';
 
 class Auth {
-  static Future<void> createAccount(String emailAddress, password) async {
+  static Future<void> createAccount(
+      String emailAddress, String password, String bio, String name) async {
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
-      CloudFireStore().addUserToDatabase(credential);
+      CloudFireStore().addUserToDatabase(credential, bio, name);
       var sp = SharedPrefs();
       sp.loggedIn();
     } on FirebaseAuthException catch (e) {
