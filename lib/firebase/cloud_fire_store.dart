@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messaging_app/helpers/logger.dart';
+import 'package:messaging_app/models/message.dart';
 import 'package:messaging_app/models/user.dart';
 
 class CloudFireStore {
@@ -19,6 +20,7 @@ class CloudFireStore {
             email: userCredential.user!.email!,
             name: name,
             userId: userCredential.user!.uid,
+            imageUrl: '',
             friends: [],
           ).toJson());
     } catch (e) {
@@ -58,9 +60,19 @@ class CloudFireStore {
     }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getFriends() {
+  Future<QuerySnapshot<Map<String, dynamic>>> getFriends() async {
     try {
-      return firestore.collection('users').get();
+      QuerySnapshot<Map<String, dynamic>> collections =
+          await firestore.collection('users').get();
+      QueryDocumentSnapshot<Map<String, dynamic>> result = collections.docs
+          .firstWhere((element) =>
+              CustomUser.fromJson(element.data()).userId ==
+              firebaseAuth.currentUser!.uid);
+      List friendsList = result.data()['friends'];
+
+      return firestore
+          .collection('users')
+          .where('email', whereIn: [...friendsList]).get();
     } catch (e) {
       rethrow;
     }
@@ -74,6 +86,47 @@ class CloudFireStore {
           .update(data);
     } catch (e) {
       logger.e(e);
+      rethrow;
+    }
+  }
+
+  Future<void> sendMessage(String message, String recipentId) async {
+    try {
+      await firestore
+          .collection('chats')
+          .doc(recipentId)
+          .collection('message-sent')
+          .doc(recipentId)
+          .set({'timeOfLastMessage': Timestamp.now()});
+      await firestore
+          .collection('chats')
+          .doc(recipentId)
+          .collection('message-sent')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('messages')
+          .add(Message(
+            message: message,
+            isSender: firebaseAuth.currentUser!.uid,
+            timestamp: Timestamp.now(),
+          ).toJson());
+      await firestore
+          .collection('chats')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('message-sent')
+          .doc(recipentId)
+          .set({'timeOfLastMessage': Timestamp.now()});
+      await firestore
+          .collection('chats')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('message-sent')
+          .doc(recipentId)
+          .collection('messages')
+          .add(Message(
+            message: message,
+            isSender: firebaseAuth.currentUser!.uid,
+            timestamp: Timestamp.now(),
+          ).toJson());
+    } catch (e) {
       rethrow;
     }
   }

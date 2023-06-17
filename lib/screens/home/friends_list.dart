@@ -2,20 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/cloud_fire_store.dart';
+import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/static/colors.dart';
-import 'package:messaging_app/widgets/contact_widget.dart';
+import 'package:messaging_app/widgets/friend_item.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
 
-class AddContactScreen extends StatefulWidget {
-  static const String routeName = 'add-contact-screen';
-  const AddContactScreen({super.key});
+class FriendsList extends StatelessWidget {
+  static const String routeName = 'friends-list';
+  const FriendsList({super.key});
 
-  @override
-  State<AddContactScreen> createState() => _AddContactScreenState();
-}
-
-class _AddContactScreenState extends State<AddContactScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +29,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                   ),
                 ),
                 const Text(
-                  'Add User',
+                  'Friends',
                   style: TextStyle(
                     fontSize: 24,
                     color: AppColor.mainColor,
@@ -45,27 +41,26 @@ class _AddContactScreenState extends State<AddContactScreen> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: CloudFireStore().readUsersData(),
+              future: CloudFireStore().getFriends(),
               builder: (context, snapshot) {
                 try {
-                  List<QueryDocumentSnapshot<Map<String, dynamic>>>? data =
-                      snapshot.data?.docs;
                   if (snapshot.connectionState == ConnectionState.done) {
-                    // logger.i(data);
+                    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+                        snapshot.data!.docs;
                     return ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
-                      itemBuilder: (context, index) {
-                        final CustomUser user =
-                            CustomUser.fromJson(data[index].data());
-                        return ContactWidget(user: user);
-                      },
-                      itemCount: data!.length,
+                      itemBuilder: (context, index) => FriendItem(
+                          user: CustomUser.fromJson(docs[index].data())),
+                      itemCount: docs.length,
                     );
                   }
-                  return const Center(child: CircularProgressIndicator());
+                  logger.i(snapshot.data);
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Container();
                 } catch (e) {
-                  // logger.e(e);
-                  return const Center(child: Text('Search to add user'));
+                  return const Center(child: Text('No Friends'));
                 }
               },
             ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:messaging_app/screens/home/profile_screen.dart';
+import 'package:messaging_app/models/user.dart';
+import 'package:messaging_app/screens/home/view_user_profile.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/widgets/send_message.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
@@ -17,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
+    CustomUser user = ModalRoute.of(context)!.settings.arguments as CustomUser;
     return Scaffold(
       body: Column(
         children: [
@@ -32,29 +34,36 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 const SizedBox(width: 15),
                 GestureDetector(
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(ProfileScreen.routeName),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(ViewUserProfileScreen.routeName, arguments: user),
                   child: Container(
                     width: 45,
                     height: 45,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/dp0.png'),
-                      ),
-                    ),
+                    decoration: user.imageUrl.isNotEmpty
+                        ? BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(user.imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/unknown.png'),
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 15),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Theresa Web',
-                      style: TextStyle(
+                      user.name,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Online',
                       style: TextStyle(
                         color: AppColor.mainColor,
@@ -105,7 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
               itemCount: 15,
             ),
           ),
-          const SendMessage(),
+           SendMessage(userId: user.userId),
         ],
       ),
     );

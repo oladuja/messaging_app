@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/auth.dart';
-import 'package:messaging_app/helpers/logger.dart';
+import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/screens/home/profile_screen.dart';
 import 'package:messaging_app/screens/welcome/welcome.dart';
 import 'package:messaging_app/static/colors.dart';
@@ -39,19 +39,28 @@ class AppDrawer extends StatelessWidget {
                   if (snapShot.connectionState == ConnectionState.waiting) {
                     return Container();
                   }
+                  var customUser = CustomUser.fromJson(snapShot.data!.data()!);
                   return Row(
                     children: [
                       GestureDetector(
                         onTap: () => Navigator.of(context)
                             .pushNamed(ProfileScreen.routeName),
                         child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/dp0.png'),
-                            ),
-                          ),
+                          width: 60,
+                          height: 60,
+                          decoration: customUser.imageUrl.isNotEmpty
+                              ? BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(customUser.imageUrl),
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : const BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/unknown.png'),
+                                  ),
+                                ),
                         ),
                       ),
                       const SizedBox(

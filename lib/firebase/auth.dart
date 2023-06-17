@@ -26,7 +26,7 @@ class Auth {
 
   static Future<void> logIn(String emailAddress, password) async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );

@@ -6,6 +6,7 @@ import 'package:messaging_app/firebase/cloud_fire_store.dart';
 import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/screens/home/add_contact_screen.dart';
+import 'package:messaging_app/screens/home/friends_list.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/static/tab.dart';
 import 'package:messaging_app/widgets/app_drawer.dart';
@@ -91,18 +92,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: CloudFireStore().getFriends(),
+              future: firebaseFirestore
+                  .collection('chats')
+                  .doc(firebaseAuth.currentUser!.uid)
+                  .collection('message-sent')
+                  .get(),
               builder: (context, snapshot) {
-                QueryDocumentSnapshot<Map<String, dynamic>> friendsList =
-                    snapshot.data!.docs.firstWhere((element) =>
-                        CustomUser.fromJson(element.data()).userId ==
-                        firebaseAuth.currentUser!.uid);
-                logger.i(friendsList.data()['friends']);
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  itemBuilder: (context, index) => const UserItem(),
-                  itemCount: 15,
-                );
+                try {
+                  if (snapshot.hasData) {
+                    return const Center(child: Text('Could not fetch data'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: Text('waiting'));
+                  }
+                  return Container();
+                } catch (e) {
+                  logger.e(e);
+                  return const Center(child: CircularProgressIndicator());
+                }
               },
             ),
           ),
@@ -110,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).pushNamed(FriendsList.routeName),
         backgroundColor: AppColor.mainColor,
         child: const FaIcon(
           FontAwesomeIcons.pen,

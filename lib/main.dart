@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:messaging_app/helpers/shared_preferences.dart';
 import 'package:messaging_app/screens/home/add_contact_screen.dart';
 import 'package:messaging_app/screens/home/chat_screen.dart';
+import 'package:messaging_app/screens/home/friends_list.dart';
 import 'package:messaging_app/screens/home/home_screen.dart';
 import 'package:messaging_app/screens/home/profile_screen.dart';
+import 'package:messaging_app/screens/home/view_user_profile.dart';
 import 'package:messaging_app/screens/welcome/welcome.dart';
 import 'package:messaging_app/screens/welcome/log_in.dart';
 import 'package:messaging_app/screens/welcome/sign_up.dart';
@@ -33,7 +34,10 @@ class MessagingApp extends StatelessWidget {
             initialRoute:
                 snapShot.data! ? HomeScreen.routeName : Welcome.routeName,
             routes: {
-              ProfileScreen.routeName: (_) => ProfileScreen(),
+              ViewUserProfileScreen.routeName: (_) =>
+                  const ViewUserProfileScreen(),
+              FriendsList.routeName: (_) => const FriendsList(),
+              ProfileScreen.routeName: (_) => const ProfileScreen(),
               AddContactScreen.routeName: (_) => const AddContactScreen(),
               ChatScreen.routeName: (_) => const ChatScreen(),
               HomeScreen.routeName: (_) => const HomeScreen(),

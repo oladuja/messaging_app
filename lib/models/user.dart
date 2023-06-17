@@ -8,10 +8,12 @@ class CustomUser {
   final String name;
   final String userId;
   final String bio;
+  final String imageUrl;
   final List<String> friends;
 
   CustomUser({
     required this.name,
+    required this.imageUrl,
     required this.userId,
     required this.bio,
     required this.email,

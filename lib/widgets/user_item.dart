@@ -1,14 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/screens/home/chat_screen.dart';
 import 'package:messaging_app/static/colors.dart';
 
 class UserItem extends StatelessWidget {
   const UserItem({
     super.key,
+    required this.email,
   });
+  final QueryDocumentSnapshot<Map<String, dynamic>> email;
 
   @override
   Widget build(BuildContext context) {
+    logger.i(email);
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(ChatScreen.routeName),
       child: ListTile(
