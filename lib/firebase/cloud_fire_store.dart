@@ -96,8 +96,9 @@ class CloudFireStore {
           .collection('chats')
           .doc(recipentId)
           .collection('message-sent')
-          .doc(recipentId)
+          .doc(firebaseAuth.currentUser!.uid)
           .set({'timeOfLastMessage': Timestamp.now()});
+
       await firestore
           .collection('chats')
           .doc(recipentId)
@@ -127,6 +128,30 @@ class CloudFireStore {
             timestamp: Timestamp.now(),
           ).toJson());
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> loadMessages() async {
+    var messgaes = await firestore
+        .collection('chats')
+        .doc(firebaseAuth.currentUser!.uid)
+        .collection('message-sent')
+        .doc('gduxd5cDB3f0GqXe0fyAlH1vl7F2')
+        .get();
+    var x = messgaes.data();
+    logger.i(x);
+    try {
+      var messgaes = await firestore
+          .collection('chats')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('message-sent')
+          .get();
+      var x = messgaes.docs;
+      logger.i(x);
+      return messgaes;
+    } catch (e) {
+      logger.e(e);
       rethrow;
     }
   }

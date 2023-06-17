@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/firebase/cloud_fire_store.dart';
 import 'package:messaging_app/helpers/logger.dart';
-import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/screens/home/add_contact_screen.dart';
 import 'package:messaging_app/screens/home/friends_list.dart';
 import 'package:messaging_app/static/colors.dart';
@@ -12,7 +11,6 @@ import 'package:messaging_app/static/tab.dart';
 import 'package:messaging_app/widgets/app_drawer.dart';
 import 'package:messaging_app/widgets/tab_list_item.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
-import 'package:messaging_app/widgets/user_item.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'home-screen';
@@ -92,11 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: firebaseFirestore
-                  .collection('chats')
-                  .doc(firebaseAuth.currentUser!.uid)
-                  .collection('message-sent')
-                  .get(),
+              future: CloudFireStore().loadMessages(),
               builder: (context, snapshot) {
                 try {
                   if (snapshot.hasData) {

@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/static/colors.dart';
 import 'package:messaging_app/widgets/account_info.dart';
-import 'package:messaging_app/widgets/setting_item.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
 
 class ViewUserProfileScreen extends StatefulWidget {
