@@ -27,13 +27,21 @@ class _ContactWidgetState extends State<ContactWidget> {
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: ListTile(
           leading: Container(
-            width: 80,
-            height: 80,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/dp0.png'),
-              ),
-            ),
+            width: 60,
+            height: 60,
+            decoration: widget.user.imageUrl.isNotEmpty
+                ? BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(widget.user.imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/unknown.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
           ),
           title: Text(
             widget.user.email,

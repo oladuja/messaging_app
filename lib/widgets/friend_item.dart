@@ -17,8 +17,8 @@ class FriendItem extends StatelessWidget {
           .pushNamed(ChatScreen.routeName, arguments: user),
       child: ListTile(
         leading: Container(
-          width: 80,
-          height: 80,
+          width: 60,
+          height: 60,
           decoration: user.imageUrl.isNotEmpty
               ? BoxDecoration(
                   image: DecorationImage(
@@ -28,8 +28,8 @@ class FriendItem extends StatelessWidget {
                 )
               : const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/unknown.png'),
-                  ),
+                      image: AssetImage('assets/images/unknown.png'),
+                      fit: BoxFit.cover),
                 ),
         ),
         title: Text(

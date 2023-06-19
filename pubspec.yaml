@@ -37,7 +37,6 @@ dependencies:
   provider: ^6.0.5
   logger: ^1.4.0
   font_awesome_flutter: ^10.4.0
-  flutter_chat_bubble: ^2.0.2
   json_annotation: ^4.8.1
   timeago: ^3.4.0
   intl_phone_field: ^3.1.0
@@ -48,6 +47,8 @@ dependencies:
   shared_preferences: ^2.1.2
   firebase_storage: ^11.2.3
   image_picker: ^0.8.8
+  chat_bubbles: ^1.4.1
+  firebase_messaging: ^14.6.3
 
 dev_dependencies:
   flutter_test:

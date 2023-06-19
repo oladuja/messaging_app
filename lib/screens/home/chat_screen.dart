@@ -1,6 +1,10 @@
+import 'package:chat_bubbles/bubbles/bubble_normal.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:messaging_app/helpers/logger.dart';
+import 'package:messaging_app/models/message.dart';
 import 'package:messaging_app/models/user.dart';
 import 'package:messaging_app/screens/home/view_user_profile.dart';
 import 'package:messaging_app/static/colors.dart';
@@ -16,6 +20,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     CustomUser user = ModalRoute.of(context)!.settings.arguments as CustomUser;
@@ -34,8 +41,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 const SizedBox(width: 15),
                 GestureDetector(
-                  onTap: () => Navigator.of(context)
-                      .pushNamed(ViewUserProfileScreen.routeName, arguments: user),
+                  onTap: () => Navigator.of(context).pushNamed(
+                      ViewUserProfileScreen.routeName,
+                      arguments: user),
                   child: Container(
                     width: 45,
                     height: 45,
@@ -63,13 +71,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text(
-                      'Online',
-                      style: TextStyle(
-                        color: AppColor.mainColor,
-                        fontSize: 12,
-                      ),
-                    ),
                   ],
                 ),
                 const Spacer(),
@@ -80,41 +81,70 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.zero,
-              reverse: true,
-              itemBuilder: (context, index) => ChatBubble(
-                margin: (index % 2 == 1)
-                    ? EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.3,
-                        bottom: 15)
-                    : EdgeInsets.only(
-                        right: MediaQuery.of(context).size.width * 0.3,
-                        bottom: 15),
-                padding: const EdgeInsets.all(15.0),
-                backGroundColor: (index % 2 == 1)
-                    ? AppColor.mainColor
-                    : AppColor.lightGreyColor,
-                elevation: 0,
-                clipper: ChatBubbleClipper5(
-                  type: (index % 2 == 1)
-                      ? BubbleType.sendBubble
-                      : BubbleType.receiverBubble,
-                  radius: 35,
-                  secondRadius: 10,
-                ),
-                child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac est pulvinar metus fermentum vehicula vitae porta lectus. Pellentesque libero nisi, finibus sed eleifend in, malesuada nec dolor',
-                  style: TextStyle(
-                    color: (index % 2 == 1) ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-              itemCount: 15,
-            ),
+          const SizedBox(height: 15),
+          StreamBuilder(
+            stream: firebaseFirestore
+                .collection('chats')
+                .doc(firebaseAuth.currentUser!.uid)
+                .collection('message-sent')
+                .doc(user.userId)
+                .collection('messages')
+                .orderBy('timestamp')
+                .snapshots(),
+            builder: (context, snapshot) {
+              try {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Expanded(child: Text('Loading messages')),
+                  );
+                }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Expanded(
+                      child: Text('No message'),
+                    ),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.active) {
+                  logger.i(snapshot.data!.docs);
+
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      // reverse: true,
+                      itemBuilder: (context, index) {
+                        Message message =
+                            Message.fromJson(snapshot.data!.docs[index].data());
+                        return BubbleNormal(
+                          bubbleRadius: 20,
+                          tail: true,
+                          isSender: (message.isSender ==
+                              firebaseAuth.currentUser!.uid),
+                          color: (message.isSender ==
+                                  firebaseAuth.currentUser!.uid)
+                              ? AppColor.mainColor
+                              : AppColor.lightGreyColor,
+                          text: message.message,
+                          textStyle: TextStyle(
+                            color: (message.isSender ==
+                                    firebaseAuth.currentUser!.uid)
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        );
+                      },
+                      itemCount: snapshot.data!.docs.length,
+                    ),
+                  );
+                }
+                return const CircularProgressIndicator();
+              } catch (e) {
+                logger.e(e);
+                return Container();
+              }
+            },
           ),
-           SendMessage(userId: user.userId),
+          SendMessage(userId: user.userId),
         ],
       ),
     );

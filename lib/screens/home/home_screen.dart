@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:messaging_app/firebase/cloud_fire_store.dart';
 import 'package:messaging_app/helpers/logger.dart';
 import 'package:messaging_app/screens/home/add_contact_screen.dart';
 import 'package:messaging_app/screens/home/friends_list.dart';
@@ -11,6 +10,7 @@ import 'package:messaging_app/static/tab.dart';
 import 'package:messaging_app/widgets/app_drawer.dart';
 import 'package:messaging_app/widgets/tab_list_item.dart';
 import 'package:messaging_app/widgets/top_bar.dart';
+import 'package:messaging_app/widgets/user_item.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'home-screen';
@@ -72,36 +72,52 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List<Widget>.generate(
-                    tabList.length,
-                    (index) => TabListItem(
-                      text: tabList[index],
-                      isSelected: counter == index,
-                      onTap: () => setState(() {
-                        counter = index;
-                      }),
-                    ),
-                  ),
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: List<Widget>.generate(
+                //     tabList.length,
+                //     (index) => TabListItem(
+                //       text: tabList[index],
+                //       isSelected: counter == index,
+                //       onTap: () => setState(() {
+                //         counter = index;
+                //       }),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
           Expanded(
-            child: FutureBuilder(
-              future: CloudFireStore().loadMessages(),
+            child: StreamBuilder(
+              stream: firebaseFirestore
+                  .collection('chats')
+                  .doc(firebaseAuth.currentUser!.uid)
+                  .collection('message-sent')
+                  .snapshots(),
               builder: (context, snapshot) {
                 try {
-                  if (snapshot.hasData) {
-                    return const Center(child: Text('Could not fetch data'));
+                  List<String> messageIds = [];
+                  for (var element in snapshot.data!.docs) {
+                    messageIds.add(element.id);
                   }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: Text('waiting'));
+                  if (snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No messages yet'));
                   }
-                  return Container();
+                  if (snapshot.data == null) {
+                    return const Center(child: Text('No messages yet'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) => UserItem(
+                        id: messageIds[index],
+                      ),
+                      itemCount: messageIds.length,
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
                 } catch (e) {
-                  logger.e(e);
                   return const Center(child: CircularProgressIndicator());
                 }
               },

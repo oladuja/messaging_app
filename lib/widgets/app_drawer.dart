@@ -57,9 +57,9 @@ class AppDrawer extends StatelessWidget {
                                 )
                               : const BoxDecoration(
                                   image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/unknown.png'),
-                                  ),
+                                      image: AssetImage(
+                                          'assets/images/unknown.png'),
+                                      fit: BoxFit.cover),
                                 ),
                         ),
                       ),

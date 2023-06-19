@@ -27,11 +27,15 @@ class _SendMessageState extends State<SendMessage> {
       ),
       child: TextField(
         controller: controller,
-        onSubmitted: (value) {},
-        keyboardType: TextInputType.text,
+        onSubmitted: (_) {
+          setState(() {
+            logger.i(controller.text += '\n');
+            controller.text += '\n';
+          });
+        },
         enabled: true,
-        minLines: 1,
-        maxLines: 3,
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.newline,
         decoration: InputDecoration(
           enabled: true,
           isDense: true,
@@ -51,6 +55,12 @@ class _SendMessageState extends State<SendMessage> {
                           .sendMessage(controller.text.trim(), widget.userId);
                       controller.clear();
                     } catch (e) {
+                      // ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString()),
+                        ),
+                      );
                       logger.i(e);
                     }
                   },
